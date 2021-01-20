@@ -1,0 +1,51 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Deploying into Amazon ECS...
+#      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
+#      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+#      - docker swarm init
+#      - $(aws ecr get-login --region $AWS_REGION)
+#      - apt-get install -y docker-compose
+      - docker login --username=antfeher --password=159Z741z!
+#      - echo -n "$CODEBUILD_BUILD_ID" | sed "s/.*:\([[:xdigit:]]\{7\}\).*/\1/" > /tmp/build_id.out
+#      - printf "%s:%s" "$REPOSITORY_URI" "$(cat /tmp/build_id.out)" > /tmp/build_tag.out
+#      - printf '[{"name":"latest","imageUri":"%s"}]' "$(cat /tmp/build_tag.out)" > imagedefinitions.json
+#      - echo Builded staff
+      - eval $(aws ecr get-login --no-include-email)
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION
+  build:
+    commands:
+      - echo Building the docker stack...         
+      - docker-compose build
+#      - docker-compose up --build -d
+      - docker-compose config --services
+#      - docker-compose up -d  152986443165.dkr.ecr.us-east-1.amazonaws.com/guacamolestack:latest
+#      - docker-compose up -d  $IMAGE_REPO_NAME
+#      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+#      - docker stack deploy --with-registry-auth --prune -c docker-stack.yml guacamole
+#      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+#      - docker-compose tag 152986443165.dkr.ecr.us-east-1.amazonaws.com/guacamolestack:latest 152986443165.dkr.ecr.us-east-1.amazonaws.com/guacamolestack:image     
+#      - docker tag $REPO_URL:$IMAGE_TAG
+#      - docker push $REPO_URL:latest
+#      - docker push $REPO_URL:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - docker-compose push
+#      - docker push "$(cat /tmp/build_tag.out)"
+#      - docker push $REPO_URL:$LATEST_VERSION
+#      - printf '[{"name":"your.task.definition.name","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imagedefinitions.json
+#      - docker push $REPOSITORY_URI:latest
+#      - docker-compose push 152986443165.dkr.ecr.us-east-1.amazonaws.com/guacamolestack:guacamole
+#      - printf '[{"name":"docker-image-name","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json  
+#      - printf '[{"name":"guac","152986443165.dkr.ecr.us-east-1.amazonaws.com/guac":"%s"}]' > imagedefinitions.json 
+#      - printf '[{"name":"%s","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json 
+#      - printf '[{"name":"postgres","imageUri":"%s"}]' > imagedefinitions.json - cat imagedefinitions.json
+#      - echo Writing image definitions file...
+#      - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$REPO_URI:$IMAGE_TAG" | tee imagedefinitions.json
+
+artifacts:
+    files: imagedefinitions.json

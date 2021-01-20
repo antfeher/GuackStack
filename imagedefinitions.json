@@ -1,0 +1,18 @@
+[
+  {
+    "name": "postgres",
+    "imageUri": "152986443165.dkr.ecr.us-east-1.amazonaws.com/postgres"
+  },
+  {
+    "name": "guacd",
+    "imageUri": "152986443165.dkr.ecr.us-east-1.amazonaws.com/guacd"
+  },
+  { 
+    "name": "guac",
+    "imageUri": "152986443165.dkr.ecr.us-east-1.amazonaws.com/guac"
+  },
+  {
+    "name": "nginx",
+    "imageUri": "152986443165.dkr.ecr.us-east-1.amazonaws.com/nginx"
+  }
+]
